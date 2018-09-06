@@ -5,15 +5,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Features\Accounts\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="5.1.0" />
-    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="5.1.0" />
+    <PackageReference Include="Highway.Data" Version="7.0.0-beta2" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="OdeToCode.AddFeatureFolders" Version="2.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Random.Infrastructure\Random.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
