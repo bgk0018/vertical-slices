@@ -1,14 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Banking.Accounts.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Banking.Accounts.Core.Models
+namespace Banking.Accounts.Models
 {
     public class TransientAccountModel
     {
+        [Required(AllowEmptyStrings = false)]
         public string HolderFirstName { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
         public string HolderLastName { get; set; }
     }
 }

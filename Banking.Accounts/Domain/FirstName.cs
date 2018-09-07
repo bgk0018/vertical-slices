@@ -7,9 +7,11 @@ namespace Banking.Accounts.Domain
 {
     public class FirstName
     {
+        public string Value { get; }
+
         public FirstName(string value)
         {
-            
+            Value = value;
         }
     }
 }

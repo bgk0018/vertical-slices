@@ -21,7 +21,7 @@ namespace Banking.Accounts.Domain
 
         public decimal Balance { get; }
 
-        public AccountHolder AccountHolder { get; }
+        public AccountHolder AccountHolder { get; set; }
 
         public AccountStatus AccountStatus
         {

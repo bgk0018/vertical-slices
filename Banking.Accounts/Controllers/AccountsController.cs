@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Banking.Accounts.Core;
-using Banking.Accounts.Core.Models;
-using Microsoft.AspNetCore.JsonPatch;
+﻿using System.Threading.Tasks;
+using Banking.Accounts.Exceptions;
+using Banking.Accounts.Models;
+using Banking.Accounts.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Banking.Accounts.Controllers
@@ -20,27 +17,27 @@ namespace Banking.Accounts.Controllers
             _service = service;
         }
 
-        [Route("")]
+        [HttpGet("")]
         public async Task<IActionResult> Get()
         {
             return Ok(await _service.Get());
         }
 
-        [Route("{id:int}")]
-        public async Task<IActionResult> Get(int id)
+        [HttpGet("{id:int}")]
+        public async Task<IActionResult> Get([FromRoute]int id)
         {
             return Ok(await _service.Get(id));
         }
 
-        [Route("")]
+        [HttpPost("")]
         public async Task<IActionResult> Post([FromBody] TransientAccountModel model)
         {
             var result = await _service.Create(model);
             return Created($"{result.Id}", result);
         }
 
-        [Route("{id:int}")]
-        public async Task<IActionResult> Put(int id, [FromBody] TransientAccountModel model)
+        [HttpPut("{id:int}")]
+        public async Task<IActionResult> Put([FromRoute]int id, [FromBody] TransientAccountModel model)
         {
             var result = await _service.Replace(id, model);
 
@@ -50,22 +47,11 @@ namespace Banking.Accounts.Controllers
             return Ok(result);
         }
 
-        [Route("{id:int}")]
-        public async Task<IActionResult> Delete(int id)
+        [HttpDelete("{id:int}")]
+        public async Task<IActionResult> Delete([FromRoute]int id)
         {
             await _service.Delete(id);
             return NoContent();
-        }
-
-        [Route("{id:int}")]
-        public async Task<IActionResult> Patch(int id, JsonPatchDocument document)
-        {
-            var result = await _service.Update(id, document);
-
-            if (ControllerContext.HttpContext.Request.Headers["representation"] == "minimal")
-                return NoContent();
-
-            return Ok(result);
         }
     }
 }

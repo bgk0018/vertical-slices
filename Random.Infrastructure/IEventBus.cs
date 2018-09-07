@@ -7,6 +7,6 @@ namespace Random.Infrastructure
 {
     public interface IEventBus
     {
-        Task Queue<T>() where T : class;
+        Task Queue<T>(T model, string eventName) where T : class;
     }
 }

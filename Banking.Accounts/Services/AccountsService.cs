@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Banking.Accounts.Core.Models;
-using Banking.Accounts.Models;
-using Highway.Data;
-using Microsoft.AspNetCore.JsonPatch;
-using Random.Infrastructure;
 using Banking.Accounts.Domain;
+using Banking.Accounts.Exceptions;
+using Banking.Accounts.Models;
 using Banking.Accounts.Persistence;
+using Highway.Data;
+using Random.Infrastructure;
 
-namespace Banking.Accounts.Core
+namespace Banking.Accounts.Services
 {
     public class AccountsService
     {
@@ -42,27 +40,82 @@ namespace Banking.Accounts.Core
 
         public async Task<AccountModel> Get(int id)
         {
-            throw new NotImplementedException();
+            if (id <= 0)
+            {
+                throw new BadRequestException("Id must be greater than 0");
+            }
+
+            var account = await _repository.FindAsync(new GetAccountById(new AccountId(id)));
+
+            if (account == null)
+            {
+                throw new NotFoundException("No account found by that id");
+            }
+
+            return _mapper.Map(account);
         }
 
         public async Task<AccountModel> Create(TransientAccountModel model)
         {
-            throw new NotImplementedException();
+            var account = _factory.Build(model.HolderFirstName, model.HolderLastName);
+
+            _repository.UnitOfWork.Add(account);
+            await _repository.UnitOfWork.CommitAsync();
+
+            var result = _mapper.Map(account);
+
+            await _bus.Queue(result, "AccountCreated");
+
+            return result;
         }
 
         public async Task<AccountModel> Replace(int id, TransientAccountModel model)
         {
-            throw new NotImplementedException();
+            if (id <= 0)
+            {
+                throw new BadRequestException("Id must be greater than 0");
+            }
+
+            var target = await _repository.FindAsync(new GetAccountById(new AccountId(id)));
+
+            if (target == null)
+            {
+                throw new NotFoundException("No account found by that id");
+            }
+
+            target.AccountHolder = new AccountHolder(new FirstName(model.HolderFirstName), new LastName(model.HolderLastName));
+
+            await _repository.UnitOfWork.CommitAsync();
+
+            var result = _mapper.Map(target);
+
+            await _bus.Queue(result, "AccountUpdated");
+
+            return result;
         }
 
         public async Task Delete(int id)
         {
-            throw new NotImplementedException();
+            if (id <= 0)
+            {
+                throw new BadRequestException("Id must be greater than 0");
+            }
+
+            var account = await _repository.FindAsync(new GetAccountById(new AccountId(id)));
+
+            if (account == null)
+            {
+                throw new NotFoundException("No account found by that id");
+            }
+
+            _repository.UnitOfWork.Remove(account);
+            await _repository.UnitOfWork.CommitAsync();
+
+            var result = _mapper.Map(account);
+
+            await _bus.Queue(result, "AccountClosed");
         }
 
-        public async Task<AccountModel> Update(int id, JsonPatchDocument document)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 }

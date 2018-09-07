@@ -1,24 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.ComTypes;
-using System.Threading.Tasks;
-using Banking.Accounts.Core.Models;
+﻿using Banking.Accounts.Domain;
 using Banking.Accounts.Models;
 using Random.Infrastructure;
 
-namespace Banking.Accounts.Domain
+namespace Banking.Accounts.Mappers
 {
-    public class AccountMapper : IMapper<AccountModel, Account>
+    public class AccountMapper : IMapper<Account, AccountModel>
     {
-        public Account Map(AccountModel source)
+        public AccountModel Map(Account source)
         {
-            return new Account(
-                new AccountId(source.Id), 
-                source.Balance, 
-                new AccountHolder(
-                    new FirstName(source.HolderFirstName), 
-                    new LastName(source.HolderLastName)));
+            return new AccountModel()
+            {
+                Balance = source.Balance,
+                HolderFirstName = source.AccountHolder.FirstName.Value,
+                HolderLastName = source.AccountHolder.LastName.Value,
+                Status = source.AccountStatus.ToString(),
+                Id = source.Id.Value
+            };
         }
     }
 }

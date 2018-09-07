@@ -6,14 +6,11 @@ namespace Random.Infrastructure
 {
     public class SimpleIdFactory
     {
-        public SimpleIdFactory()
-        {
-            
-        }
+        private static int _oneUpCounter = 1;
 
         public int Generate()
         {
-            throw new NotImplementedException();
+            return _oneUpCounter++;
         }
     }
 }
