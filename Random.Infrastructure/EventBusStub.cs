@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace Random.Infrastructure
 {
@@ -9,7 +10,13 @@ namespace Random.Infrastructure
     {
         public Task Queue<T>(T model, string eventName) where T : class
         {
-            Console.WriteLine($"{eventName}");
+            var message = new
+            {
+                Event = eventName,
+                Model = model
+            };
+
+            Console.WriteLine(JsonConvert.SerializeObject(message, Formatting.Indented));
 
             return Task.CompletedTask;
         }
