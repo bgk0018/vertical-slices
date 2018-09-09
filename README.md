@@ -24,3 +24,5 @@ We have a simple xUnit test suite that can be run.
 * [Highway.Data](https://github.com/HighwayFramework/Highway.Data) - Persistence layer
 * [GlobalExceptionHandling](https://github.com/JosephWoodward/GlobalExceptionHandlerDotNet) - Application exception handling
 
+Tested with xUnit and Moq.
+
