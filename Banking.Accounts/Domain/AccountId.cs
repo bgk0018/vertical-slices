@@ -7,19 +7,19 @@ namespace Banking.Accounts.Domain
 {
     public class AccountId
     {
-        private int _value;
+        private int _id;
 
         public int Value
         {
-            get => _value;
+            get => _id;
             set
             {
                 if (value <= 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(Value));
+                    throw new ArgumentOutOfRangeException(nameof(value));
                 }
 
-                _value = value;
+                _id = value;
             }
         }
 

@@ -7,7 +7,19 @@ namespace Banking.Accounts.Domain
 {
     public class FirstName
     {
-        public string Value { get; }
+        private string _firstName;
+
+        public string Value
+        {
+            get => _firstName;
+            private set
+            {
+                if(string.IsNullOrWhiteSpace(value))
+                    throw new ArgumentOutOfRangeException(nameof(value));
+
+                _firstName = value;
+            }
+        }
 
         public FirstName(string value)
         {
