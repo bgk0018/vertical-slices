@@ -1,12 +1,9 @@
-﻿using System;
-using System.Net;
-using Banking.Accounts.Domain;
+﻿using Banking.Accounts.Domain.Accounts;
 using Banking.Accounts.Exceptions;
-using Banking.Accounts.Mappers;
-using Banking.Accounts.Models;
-using Banking.Accounts.Services;
+using Banking.Accounts.Features.Accounts;
 using GlobalExceptionHandler.WebApi;
 using Highway.Data;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -34,17 +31,21 @@ namespace Banking.Accounts
             var repository = new Repository(uow);
 
             services
+                .AddMediatR()
                 .AddSwaggerGen(c =>
                 {
                     c.SwaggerDoc("v1", new Info { Title = "Accounts API", Version = "v1" });
+                    c.CustomSchemaIds(x => x.FullName);
                 })
                 .AddSingleton<IEventBus, EventBusStub>()
                 .AddScoped<IMapper<Account, AccountModel>, AccountMapper>()
                 .AddScoped<IAccountFactory, AccountFactory>()
                 .AddSingleton<IRepository>(repository)
-                .AddScoped<AccountsService>()
+                .AddSingleton<IReadOnlyRepository>(repository)
+                .AddSingleton<IWriteOnlyUnitOfWork>(uow)
                 .AddScoped<SimpleIdFactory>()
                 .AddMvc()
+                .AddFeatureFolders()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
         }

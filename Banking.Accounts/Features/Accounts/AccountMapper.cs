@@ -1,8 +1,7 @@
-﻿using Banking.Accounts.Domain;
-using Banking.Accounts.Models;
+﻿using Banking.Accounts.Domain.Accounts;
 using Random.Infrastructure;
 
-namespace Banking.Accounts.Mappers
+namespace Banking.Accounts.Features.Accounts
 {
     public class AccountMapper : IMapper<Account, AccountModel>
     {

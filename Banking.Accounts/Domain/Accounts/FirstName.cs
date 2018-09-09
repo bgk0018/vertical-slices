@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace Banking.Accounts.Domain
+namespace Banking.Accounts.Domain.Accounts
 {
     public class FirstName
     {

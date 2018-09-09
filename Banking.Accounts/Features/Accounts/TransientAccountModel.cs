@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Banking.Accounts.Models
+namespace Banking.Accounts.Features.Accounts
 {
     public class TransientAccountModel
     {
